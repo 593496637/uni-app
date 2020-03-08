@@ -1,17 +1,21 @@
+// 接口请求的源码实现
 import http from './request/interface'
 
 let baseurl = null;
-
+// 环境判断
 if (process.env.NODE_ENV === 'development') { //开发环境
 	baseurl = 'http://114.118.7.20:8262';
 } else { //生产环境
 	baseurl = 'http://114.118.7.20:8262';
 }
+// api接口
+const login = '/v1/login/';
+const userInfo = '/v1/org/organization/';
 
 http.config.baseUrl = baseurl;
 
 // 下面这些API方法不需要验证token
-let filterApi = ['/v1/login/']
+let filterApi = []
 //设置请求前拦截器
 http.interceptor.request = (config) => {
 	// 过滤掉不需要验证的token的路由api
@@ -52,48 +56,12 @@ const api = {
 	uploadurl: baseurl + '',
 	// 登录
 	login: (data) => {
-		return http.post('/v1/login/', data);
+		return http.post(login, data);
 	},
 	// 用户信息
 	getUserInfo: (id) => {
-		return http.get(`/v1/org/organization/${id}/`);
+		return http.get(userInfo + `${id}/`);
 	},
-	// 日常记录
-	recordOfDaily: (data) => {
-		return http.get(`/v1/record/terminal_record/`, data);
-	},
-	// 提交订单
-	submitOrder: (data) => {
-		return http.post('/v1/order/order/', data);
-	},
-	// 历史订单
-	orderList: (data = {}) => {
-		return http.get('/v1/order/order/', data);
-	},
-	// 订单反馈
-	orderFeedBack: (id, data) => {
-		return http.patch(`/v1/order/order/${id}/`, data);
-	},
-	// 消息提醒
-	notifications: (data) => {
-		return http.get('/v1/tongji/wechat/', data);
-	},
-	// 预约完成记录
-	reserveList: (data) => {
-		return http.get('/v1/order/work/', data);
-	},
-	// 意见反馈
-	opinion: (data) => {
-		return http.post('/v1/opi/opinion/', data);
-	},
-	// 历史建议
-	opinionList: (data) => {
-		return http.get('/v1/opi/opinion/', data);
-	},
-	// 统计
-	statistics: (data) => {
-		return http.get('/v1/tongji/wechat_tongji/', data);
-	}
 }
 
 
